@@ -31,14 +31,14 @@ if format_type == "Plain Text":
     ques_text = st.text_area("Enter your Question: 🙋",height=50)
     if st.button("Run"):
         if ques_text is not None and text is not None and ques_text != "" and text != "":
-            with st.spinner(f"Getting your Answer... 💫"):
+            with st.spinner("Getting your Answer... 💫"):
                 ans = generate_answer(text,ques_text)
                 st.markdown("Here's the answer 🗣")
                 st.balloons()
-                st.success('✅ '+ans)
+                st.success(f'✅ {ans}')
         elif (ques_text is None or ques_text == "") and (text is not None or text != ""):
             st.warning('⚠ Please enter your question! 😯')
-        elif (ques_text is not None or ques_text != "") and (text is None or text == "" ):
+        elif ques_text is not None or ques_text != "":
             st.warning('⚠ Please enter your plain text! 😯')
         else:
             st.warning('⚠ Text fields missing! 😯')
@@ -50,18 +50,22 @@ if format_type == "Documents":
         with open(os.path.join(upload_path,uploaded_file.name),"wb") as f:
             f.write((uploaded_file).getbuffer())
         if uploaded_file.name.endswith('.txt') or uploaded_file.name.endswith('.TXT'):
-            with st.spinner(f"Working... 💫"):
+            with st.spinner("Working... 💫"):
                 uploaded_txt_file = os.path.abspath(os.path.join(upload_path,uploaded_file.name))
-                downloaded_txt_file = os.path.abspath(os.path.join(download_path,str("processed_"+uploaded_file.name)))
+                downloaded_txt_file = os.path.abspath(
+                    os.path.join(
+                        download_path, str(f"processed_{uploaded_file.name}")
+                    )
+                )
                 txt = extract_text_txt(uploaded_txt_file,downloaded_txt_file)
 
         if uploaded_file.name.endswith('.pdf') or uploaded_file.name.endswith('.PDF'):
-            with st.spinner(f"Working... 💫"):
+            with st.spinner("Working... 💫"):
                 uploaded_pdf_file = os.path.abspath(os.path.join(upload_path,uploaded_file.name))
                 txt = extract_text_pdf(uploaded_pdf_file)
 
         if uploaded_file.name.endswith('.docx') or uploaded_file.name.endswith('.DOCX'):
-            with st.spinner(f"Working... 💫"):
+            with st.spinner("Working... 💫"):
                 uploaded_docx_file = os.path.abspath(os.path.join(upload_path,uploaded_file.name))
                 txt = extract_text_docx(uploaded_docx_file)
 
@@ -71,11 +75,11 @@ if format_type == "Documents":
     ques_text = st.text_area("Enter your Question: 🙋",height=50)
     if st.button("Run"):
         if (ques_text is not None and ques_text != ""):
-            with st.spinner(f"Getting your Answer... 💫"):
-                    ans = generate_answer(str(txt),ques_text)
-                    st.markdown("Here's the answer 🗣")
-                    st.balloons()
-                    st.success('✅ '+ans)
+            with st.spinner("Getting your Answer... 💫"):
+                ans = generate_answer(str(txt),ques_text)
+                st.markdown("Here's the answer 🗣")
+                st.balloons()
+                st.success(f'✅ {ans}')
         else:
             st.warning('⚠ Please enter your question! 😯')
 
